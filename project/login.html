@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	<meta name="renderer" content="webkit">
+	<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+	<link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css">
+	<link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap-theme.min.css">
+	<script src="https://cdn.bootcss.com/jquery/2.1.1/jquery.min.js"></script>
+	<script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+	<link rel="stylesheet" type="text/css" href="stylesheets/login.css">
+	<title>文档标题</title>
+</head>
+<body>
+	 <form name="form">
+        <h3>后台登录</h3>
+        <div class="msg username">
+            <label for="userName">用户名：</label>
+            <input type="text" name="name" id="userName" required="required">        
+        </div>
+        <div class="msg password">
+            <label for="password">密<span style="visibility: hidden;">码</span>码：</label>
+            <input type="password" name="pwd" id="password" required="required">
+             
+        </div>
+        <div class="loginBtn">
+            <input type="button" name="login" value="登陆" id="login">
+        </div>
+    </form>
+    <script type="text/javascript">
+        $("form :input").blur(function(){
+            $(this).parent().next(".warn,.info").remove();
+            if($(this).is("#userName")){
+                var userName = $(this).val();
+                if(userName.length<5){
+                    var text = "<span class='warn'>* 请输入大于等于5个字符的用户名</span>";
+                    $(".username").after($(text));
+                }else {
+                    var text = "<span class='info'>* 格式正确</span>";
+                    $(".username").after($(text));
+                }
+            }else if($(this).is("#password")){
+                var password = $(this).val();
+                if(password.length==0){
+                    var text = "<span class='warn'>* 请输入密码</span>";
+                    $(".password").after($(text));
+                }else {
+                     var text = "<span class='info'>* 格式正确</span>";
+                     $(".password").after($(text));
+                }
+            }
+            
+        }).focus(function(){
+            $(this).triggerHandler('blur');
+        }).keyup(function(){
+            $(this).triggerHandler('blur');
+        });
+
+$("#login").click(function(){
+    $("form input:required").triggerHandler('blur');
+
+   if($(".warn").length==0){
+   //  //js方法
+   //  var xhr = new XMLHttpRequest();
+   //  var form = document.forms[0];
+   //  var data = new FormData(form);
+   //  xhr.open('post','/carrots-admin-ajax/a/login',true);
+   //  xhr.onload = function(){
+   //      if(xhr.status>=200&&xhr.status<300||xhr.status==304){
+   //          alert(xhr.responseText);
+   //      }else{
+   //          alert('unsuccessful');
+   //      }
+   //  };
+   //  xhr.send(data);
+
+    //jquery
+    $.ajax({
+        url:'/carrots-admin-ajax/a/login',
+        type: "post",
+        data: $("form").serialize(),
+        dataType: "json",
+        success: function(data){
+        	console.log(data);
+        },
+        erroe: function(e){
+
+        }
+    });
+
+
+
+   } 
+})
+
+        
+    </script>
+</body>
+</html>
